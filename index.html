@@ -372,6 +372,54 @@ nav a:hover { color: white; }
 ───────────────────────────────────────── */
 .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ─────────────────────────────────────────
+   SCROLL PROGRESS BAR
+───────────────────────────────────────── */
+#scroll-nav {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  z-index: 99; display: flex; flex-direction: column; align-items: flex-end;
+  gap: 0;
+}
+.scroll-track {
+  position: absolute; right: 5px; top: 0; bottom: 0;
+  width: 1.5px; background: rgba(255,255,255,0.08); border-radius: 2px;
+}
+.scroll-fill {
+  position: absolute; right: 5px; top: 0;
+  width: 1.5px; background: var(--teal); border-radius: 2px;
+  height: 0%; transition: height 0.1s linear;
+}
+.scroll-item {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; padding: 10px 0; position: relative;
+}
+.scroll-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.15);
+  transition: all 0.25s; flex-shrink: 0; position: relative; z-index: 1;
+}
+.scroll-label {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.3); white-space: nowrap;
+  transition: all 0.25s; text-align: right;
+  opacity: 0; transform: translateX(4px);
+  pointer-events: none;
+}
+.scroll-item:hover .scroll-label,
+.scroll-item.active .scroll-label {
+  opacity: 1; transform: translateX(0);
+}
+.scroll-item.active .scroll-dot {
+  background: var(--teal); border-color: var(--teal);
+  box-shadow: 0 0 8px rgba(49,242,254,0.5);
+  transform: scale(1.3);
+}
+.scroll-item:hover .scroll-dot {
+  background: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.5);
+}
+.scroll-item.active .scroll-label { color: var(--teal); }
+@media (max-width: 900px) { #scroll-nav { display: none; } }
 </style>
 </head>
 <body>
@@ -386,6 +434,32 @@ nav a:hover { color: white; }
     <a href="#personal">About</a>
   </div>
 </nav>
+
+<!-- ── Scroll Progress Nav ── -->
+<div id="scroll-nav">
+  <div class="scroll-track"></div>
+  <div class="scroll-fill" id="scroll-fill"></div>
+  <div class="scroll-item active" data-target="hero">
+    <span class="scroll-label">Hero</span>
+    <div class="scroll-dot"></div>
+  </div>
+  <div class="scroll-item" data-target="timeline-section">
+    <span class="scroll-label">Career Timeline</span>
+    <div class="scroll-dot"></div>
+  </div>
+  <div class="scroll-item" data-target="personal">
+    <span class="scroll-label">How I Think &amp; Work</span>
+    <div class="scroll-dot"></div>
+  </div>
+  <div class="scroll-item" data-target="experiences">
+    <span class="scroll-label">Key Experiences</span>
+    <div class="scroll-dot"></div>
+  </div>
+  <div class="scroll-item" data-target="why-luma">
+    <span class="scroll-label">Why Luma</span>
+    <div class="scroll-dot"></div>
+  </div>
+</div>
 
 <!-- ── Hero ── -->
 <section id="hero">
@@ -867,6 +941,36 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Scroll progress nav ────────────────────────────────────────────────────────
+(function() {
+  const items = document.querySelectorAll('.scroll-item');
+  const fill  = document.getElementById('scroll-fill');
+  const sections = Array.from(items).map(el => document.getElementById(el.dataset.target));
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = document.getElementById(item.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  function update() {
+    const scrollY  = window.scrollY;
+    const docH     = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docH > 0 ? (scrollY / docH) * 100 : 0;
+    fill.style.height = progress + '%';
+
+    let active = 0;
+    sections.forEach((sec, i) => {
+      if (sec && scrollY >= sec.offsetTop - window.innerHeight * 0.4) active = i;
+    });
+    items.forEach((el, i) => el.classList.toggle('active', i === active));
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 buildTimeline();
