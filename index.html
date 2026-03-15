@@ -401,14 +401,9 @@ nav a:hover { color: white; }
 }
 .scroll-label {
   font-size: 0.65rem; font-weight: 600; letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.3); white-space: nowrap;
+  color: rgba(255,255,255,0.28); white-space: nowrap;
   transition: all 0.25s; text-align: right;
-  opacity: 0; transform: translateX(4px);
   pointer-events: none;
-}
-.scroll-item:hover .scroll-label,
-.scroll-item.active .scroll-label {
-  opacity: 1; transform: translateX(0);
 }
 .scroll-item.active .scroll-dot {
   background: var(--teal); border-color: var(--teal);
@@ -418,7 +413,8 @@ nav a:hover { color: white; }
 .scroll-item:hover .scroll-dot {
   background: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.5);
 }
-.scroll-item.active .scroll-label { color: var(--teal); }
+.scroll-item.active .scroll-label { color: var(--teal); font-weight: 700; }
+.scroll-item:hover .scroll-label { color: rgba(255,255,255,0.7); }
 @media (max-width: 900px) { #scroll-nav { display: none; } }
 </style>
 </head>
@@ -440,7 +436,7 @@ nav a:hover { color: white; }
   <div class="scroll-track"></div>
   <div class="scroll-fill" id="scroll-fill"></div>
   <div class="scroll-item active" data-target="hero">
-    <span class="scroll-label">Hero</span>
+    <span class="scroll-label">Profile</span>
     <div class="scroll-dot"></div>
   </div>
   <div class="scroll-item" data-target="timeline-section">
