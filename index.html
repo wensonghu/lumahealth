@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wensong Hu · Luma Health</title>
+<style>
+:root {
+  --blue:   #4e5ed6;
+  --teal:   #31f2fe;
+  --green:  #17cc45;
+  --orange: #FF9500;
+  --red:    #FF453a;
+  --purple: #AF52DE;
+  --bg:     #060a12;
+  --card:   rgba(255,255,255,0.07);
+  --card2:  rgba(255,255,255,0.11);
+  --sub:    rgba(255,255,255,0.62);
+  --muted:  rgba(255,255,255,0.38);
+  --sep:    rgba(255,255,255,0.08);
+  --r:      16px;
+  --r-lg:   22px;
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Shared ── */
+.section { padding: 88px max(32px, calc(50% - 580px)); }
+.section-dark { background: linear-gradient(160deg, #060a12 0%, #0d1828 60%, #060a12 100%); }
+.section-darker { background: #060a12; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(49,242,254,0.12); color: var(--teal);
+  border-radius: 20px; padding: 4px 14px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.sh { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 10px; }
+.sp { font-size: 1.05rem; color: var(--sub); line-height: 1.8; }
+.ios-card {
+  background: var(--card); border-radius: var(--r-lg); padding: 22px 24px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.07);
+}
+.ios-card h3 { font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 8px; letter-spacing: -0.2px; }
+.ios-card p  { font-size: 0.95rem; color: var(--sub); line-height: 1.65; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px;
+}
+.badge-green  { background: rgba(23,204,69,0.15);   color: #17cc45; }
+.badge-teal   { background: rgba(49,242,254,0.12);  color: var(--teal); }
+.badge-blue   { background: rgba(78,94,214,0.2);    color: #7a8af0; }
+.badge-purple { background: rgba(175,82,222,0.15);  color: #c77af5; }
+.badge-orange { background: rgba(255,149,0,0.15);   color: #FF9500; }
+.callout {
+  background: rgba(78,94,214,0.1); border-radius: var(--r);
+  padding: 14px 18px; font-size: 0.88rem; color: rgba(255,255,255,0.82);
+  line-height: 1.65; display: flex; gap: 10px; align-items: flex-start;
+}
+.callout .icon { flex-shrink: 0; margin-top: 1px; }
+.callout strong { color: var(--teal); }
+.ios-list { background: var(--card); border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.07); }
+.ios-list-item {
+  display: flex; align-items: flex-start; gap: 14px; padding: 14px 20px;
+  border-bottom: 0.5px solid var(--sep); font-size: 0.88rem; color: var(--sub); line-height: 1.5;
+}
+.ios-list-item:last-child { border-bottom: none; }
+.ios-list-item .ico { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.ios-list-item strong { display: block; color: white; font-size: 0.875rem; margin-bottom: 2px; }
+.section-label {
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--muted); margin-bottom: 20px;
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+#hero {
+  position: relative; overflow: hidden;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, #060a12 0%, #0d1828 60%, #060a12 100%);
+  padding: 60px max(24px, calc(50% - 560px)) 80px;
+  text-align: center;
+}
+.orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.18; pointer-events: none; }
+.orb1 { width: 550px; height: 550px; background: #31f2fe; top: -200px; right: -100px; }
+.orb2 { width: 400px; height: 400px; background: #4e5ed6; bottom: -150px; left: -80px; }
+.hero-eyebrow {
+  display: inline-block;
+  background: rgba(49,242,254,0.1); border: 1px solid rgba(49,242,254,0.25);
+  color: rgba(255,255,255,0.75); border-radius: 20px; padding: 5px 18px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero-h1 {
+  font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800;
+  letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 12px;
+}
+.hero-sub { font-size: 1.2rem; color: rgba(255,255,255,0.5); margin-bottom: 36px; letter-spacing: 0.3px; }
+
+.bio-card {
+  background: rgba(255,255,255,0.07); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-lg); padding: 20px 24px;
+  text-align: left; display: flex; gap: 18px; align-items: flex-start;
+  max-width: 720px; width: 100%;
+}
+.bio-photo {
+  width: 58px; height: 58px; border-radius: 50%; object-fit: cover;
+  flex-shrink: 0; border: 2px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.bio-avatar {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: linear-gradient(135deg, #007AFF, #32ADE6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 800; color: white; flex-shrink: 0;
+}
+.bio-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 3px; }
+.bio-role { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-bottom: 10px; }
+.bio-desc { font-size: 0.97rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
+.bio-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.bio-chip {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 4px 13px; font-size: 0.78rem; color: rgba(255,255,255,0.6);
+}
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.scroll-arrow { width: 1px; height: 28px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3)); }
+
+/* ─────────────────────────────────────────
+   CAREER TIMELINE
+───────────────────────────────────────── */
+#timeline-section {
+  background: linear-gradient(180deg, #060a12 0%, #0b1520 100%);
+  padding: 80px max(32px, calc(50% - 580px)) 64px;
+}
+.tl-header { margin-bottom: 48px; }
+
+/* horizontal track */
+.tl-track-wrap { position: relative; margin-bottom: 48px; overflow-x: auto; padding-bottom: 8px; }
+.tl-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  min-width: 640px; position: relative; padding: 0 20px;
+}
+.tl-row::before {
+  content: ''; position: absolute; top: 20px; left: 40px; right: 40px;
+  height: 1.5px; background: rgba(255,255,255,0.1);
+}
+.tl-node {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; flex: 1; cursor: pointer; position: relative; z-index: 1;
+  padding: 0 4px;
+  transition: transform 0.2s;
+}
+.tl-node:hover { transform: translateY(-2px); }
+.tl-dot-wrap {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  border: 2px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 10px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 0 0 rgba(0,0,0,0);
+}
+.tl-node.active .tl-dot-wrap {
+  border-width: 2.5px;
+  transform: scale(1.15);
+}
+.tl-node[data-color="teal"].active   .tl-dot-wrap { border-color: var(--teal);   background: rgba(49,242,254,0.15);  box-shadow: 0 0 16px rgba(49,242,254,0.25); }
+.tl-node[data-color="blue"].active   .tl-dot-wrap { border-color: var(--blue);   background: rgba(78,94,214,0.2);    box-shadow: 0 0 16px rgba(78,94,214,0.3); }
+.tl-node[data-color="purple"].active .tl-dot-wrap { border-color: var(--purple); background: rgba(175,82,222,0.15);  box-shadow: 0 0 16px rgba(175,82,222,0.25); }
+.tl-node[data-color="green"].active  .tl-dot-wrap { border-color: var(--green);  background: rgba(23,204,69,0.12);   box-shadow: 0 0 16px rgba(23,204,69,0.2); }
+.tl-node[data-color="accent"].active .tl-dot-wrap { border-color: #007AFF;       background: rgba(0,122,255,0.18);   box-shadow: 0 0 20px rgba(0,122,255,0.35); }
+
+.tl-year  { font-size: 0.6rem; color: var(--muted); margin-bottom: 3px; letter-spacing: 0.3px; font-weight: 600; }
+.tl-role  { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.8); line-height: 1.3; }
+.tl-co    { font-size: 0.6rem; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+.tl-node.active .tl-role { color: white; }
+.tl-node[data-color="teal"].active   .tl-co { color: var(--teal); }
+.tl-node[data-color="blue"].active   .tl-co { color: #7a8af0; }
+.tl-node[data-color="purple"].active .tl-co { color: #c77af5; }
+.tl-node[data-color="green"].active  .tl-co { color: var(--green); }
+.tl-node[data-color="accent"].active .tl-co { color: #32ADE6; }
+
+/* detail panel */
+.tl-detail {
+  background: var(--card2);
+  border-radius: var(--r-lg);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.08);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.tl-detail-inner { padding: 28px 32px; }
+.tl-detail-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+.tl-detail-ico {
+  width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+}
+.tl-detail-title h2 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 3px; }
+.tl-detail-title .tl-detail-co { font-size: 0.8rem; color: var(--sub); }
+.tl-detail-title .tl-detail-dates { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.tl-bullets li {
+  font-size: 0.95rem; color: var(--sub); line-height: 1.7;
+  padding: 9px 0 9px 20px; position: relative;
+  border-bottom: 0.5px solid var(--sep);
+}
+.tl-bullets li:last-child { border-bottom: none; }
+.tl-bullets li::before {
+  content: ''; position: absolute; left: 4px; top: 17px;
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.tl-bullets li strong { color: white; }
+.tl-metric-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ─────────────────────────────────────────
+   KEY EXPERIENCES
+───────────────────────────────────────── */
+#experiences { padding: 80px max(32px, calc(50% - 580px)); background: var(--bg); }
+.exp-card {
+  background: var(--card); border-radius: var(--r-lg); overflow: hidden;
+  cursor: pointer; transition: box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.07);
+  user-select: none;
+}
+.exp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.1); }
+.exp-card.open { box-shadow: 0 6px 32px rgba(0,122,255,0.15), 0 0 0 1.5px rgba(78,94,214,0.5); }
+.exp-header { display: flex; align-items: center; gap: 14px; padding: 18px 20px; }
+.exp-ico { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.exp-title { flex: 1; }
+.exp-title h3 { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 2px; }
+.exp-title p  { font-size: 0.82rem; color: var(--muted); }
+.exp-chevron { font-size: 0.75rem; color: var(--muted); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+.exp-card.open .exp-chevron { transform: rotate(180deg); color: var(--blue); }
+.exp-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+.exp-card.open .exp-body { max-height: 600px; }
+.exp-inner { padding: 0 20px 20px; border-top: 0.5px solid var(--sep); }
+.exp-section { margin-top: 14px; }
+.exp-section-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 6px; }
+.exp-section p { font-size: 0.95rem; color: var(--sub); line-height: 1.7; }
+.exp-outcome {
+  background: rgba(49,242,254,0.06); border-left: 3px solid var(--teal);
+  border-radius: 0 8px 8px 0; padding: 10px 14px; margin-top: 12px;
+  font-size: 0.82rem; color: rgba(255,255,255,0.82); line-height: 1.55;
+}
+.exp-outcome strong { color: var(--teal); }
+
+/* ─────────────────────────────────────────
+   WHY LUMA
+───────────────────────────────────────── */
+#why-luma {
+  background: linear-gradient(160deg, #060a12 0%, #0d1828 60%, #060a12 100%);
+  padding: 80px max(32px, calc(50% - 580px));
+}
+
+/* ─────────────────────────────────────────
+   PERSONAL / PHILOSOPHY
+───────────────────────────────────────── */
+#personal { padding: 80px max(32px, calc(50% - 580px)); background: var(--bg); }
+.trait-card {
+  background: var(--card); border-radius: var(--r-lg); padding: 20px 22px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.07);
+}
+.trait-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.trait-card { cursor: default; }
+.trait-card.expandable { cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; }
+.trait-card.expandable:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.1); }
+.trait-card.expandable.open { box-shadow: 0 6px 32px rgba(78,94,214,0.15), 0 0 0 1.5px rgba(78,94,214,0.5); cursor: default; }
+.trait-card h3 { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 6px; }
+.trait-card p  { font-size: 0.83rem; color: var(--sub); line-height: 1.6; }
+.trait-card .expand-hint { font-size: 0.72rem; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+.trait-card.open .expand-hint { display: none; }
+.trait-expand-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+.trait-card.open .trait-expand-body { max-height: 600px; }
+
+/* Social styles quadrant */
+.social-quadrant { margin-top: 14px; border-top: 0.5px solid var(--sep); padding-top: 14px; }
+.sq-wrap { position: relative; width: 100%; }
+.sq-grid {
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  border-radius: 10px; overflow: hidden; gap: 2px; background: rgba(255,255,255,0.06);
+}
+.sq-cell {
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; position: relative;
+}
+.sq-cell h4 { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 2px; }
+.sq-cell p  { font-size: 0.68rem; line-height: 1.5; }
+.sq-analytical { background: rgba(59,100,200,0.25); }
+.sq-analytical h4 { color: #7a9ef5; }
+.sq-analytical p  { color: rgba(122,158,245,0.8); }
+.sq-driver    { background: rgba(180,40,40,0.22); }
+.sq-driver h4 { color: #f07070; }
+.sq-driver p  { color: rgba(240,112,112,0.8); }
+.sq-amiable   { background: rgba(40,130,60,0.22); }
+.sq-amiable h4 { color: #5ec97a; }
+.sq-amiable p  { color: rgba(94,201,122,0.8); }
+.sq-expressive { background: rgba(180,130,0,0.22); }
+.sq-expressive h4 { color: #e6b830; }
+.sq-expressive p  { color: rgba(230,184,48,0.8); }
+.sq-dot {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+  box-shadow: 0 0 10px rgba(192,57,43,0.7), 0 2px 4px rgba(0,0,0,0.5);
+  top: calc(50% - 7px); left: calc(50% - 7px);
+  transform: translate(-50%, -50%);
+  pointer-events: none; z-index: 2;
+}
+.sq-axes { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.6rem; color: var(--muted); padding: 0 2px; }
+.sq-axis-label-top { font-size: 0.6rem; color: var(--muted); text-align: center; margin-bottom: 4px; }
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  background: #040709; border-top: 0.5px solid rgba(255,255,255,0.06);
+  padding: 32px max(32px, calc(50% - 580px));
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+footer .f-name { font-size: 0.9rem; font-weight: 700; }
+footer .f-links { display: flex; gap: 20px; }
+footer a { font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+footer a:hover { color: white; }
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(6,10,18,0.8); backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  padding: 0 max(24px, calc(50% - 580px));
+  display: flex; align-items: center; height: 52px; gap: 28px;
+}
+nav .nav-name { font-size: 0.88rem; font-weight: 700; flex: 1; }
+nav a { font-size: 0.78rem; color: var(--muted); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+nav a:hover { color: white; }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 760px) {
+  .g2, .g3 { grid-template-columns: 1fr; }
+  .bio-card { flex-direction: column; }
+  nav .nav-links { display: none; }
+}
+@media (max-width: 900px) {
+  .g3 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─────────────────────────────────────────
+   SCROLL FADE-IN
+───────────────────────────────────────── */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <span class="nav-name">Wensong Hu</span>
+  <div class="nav-links" style="display:flex;gap:24px;align-items:center;">
+    <a href="#timeline-section">Experience</a>
+    <a href="#experiences">Key Projects</a>
+    <a href="#why-luma">Why Luma</a>
+    <a href="#personal">About</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div style="position:relative;z-index:1;max-width:720px;width:100%;display:flex;flex-direction:column;align-items:center;">
+    <div class="hero-eyebrow">LUMA HEALTH</div>
+    <h1 class="hero-h1">Wensong Hu</h1>
+    <p class="hero-sub">Eligibility · Claims · Member Growth</p>
+    <div class="bio-card">
+      <img class="bio-photo"
+        src="https://media.licdn.com/dms/image/v2/D5603AQHCLNHUQCrJKQ/profile-displayphoto-shrink_200_200/B56ZQZMlGVHoAg-/0/1735589515955?e=2147483647&v=beta&t=v3CA3BwmuytTYSJeIUthw3Nb7QEnBZs8WTpFO08lPXI"
+        alt="Wensong Hu"
+        onerror="this.style.display='none';document.getElementById('bio-av').style.display='flex';">
+      <div class="bio-avatar" id="bio-av" style="display:none;">W</div>
+      <div style="flex:1;">
+        <div class="bio-name">Wensong Hu</div>
+        <div class="bio-role">Director of Product · Teladoc Health (Livongo)</div>
+        <div class="bio-desc">10+ years building healthcare products at the intersection of benefits, revenue cycle, and member engagement across multiple digital health companies. Responsible for over $10M revenue growth annually (PLG) at Teladoc/Livongo, architected the single eligibility API and automated claims platform (~40% of platform revenue).</div>
+        <div class="bio-chips">
+          <span class="bio-chip">⚡ UMD Electrical Engineering</span>
+          <span class="bio-chip">🎓 Chicago Booth MBA</span>
+          <span class="bio-chip">📍 SF Bay Area</span>
+          <span class="bio-chip">🔍 Analytical Thinker</span>
+          <span class="bio-chip">💰 Value Creator</span>
+          <span class="bio-chip">🥋 Martial Art</span>
+          <span class="bio-chip">♠️ Poker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ── Career Timeline ── -->
+<section id="timeline-section">
+  <div class="tl-header fade-in">
+    <div class="chip">Professional Journey</div>
+    <h2 class="sh">Career Timeline</h2>
+    <p class="sp" style="max-width:580px;">Click any role below to expand the full experience.</p>
+  </div>
+
+  <div class="tl-track-wrap fade-in">
+    <div class="tl-row" id="tl-row">
+      <!-- nodes injected by JS -->
+    </div>
+  </div>
+
+  <div class="tl-detail fade-in" id="tl-detail">
+    <div class="tl-detail-inner" id="tl-detail-inner">
+      <!-- content injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ── Personal ── -->
+<section id="personal">
+  <div class="fade-in" style="margin-bottom:32px;">
+    <div class="chip">About Me</div>
+    <h2 class="sh">How I Think &amp; Work</h2>
+  </div>
+  <div class="g2 fade-in" style="margin-bottom:24px;">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="trait-card expandable" onclick="toggleTrait(this)">
+        <div class="trait-icon">🔍</div>
+        <h3>Analytical Thinker</h3>
+        <p>I like knowing how things work — deeply. I don't accept "it works" as an answer. Understanding the system is the prerequisite to improving it.</p>
+        <div class="expand-hint">▼ See my social style</div>
+        <div class="trait-expand-body">
+          <div class="social-quadrant">
+            <div class="sq-axis-label-top">Reserved</div>
+            <div class="sq-wrap">
+              <div class="sq-grid">
+                <div class="sq-cell sq-analytical">
+                  <h4>Analytical</h4>
+                  <p>Logical<br>Detail-Oriented<br>Cautious</p>
+                </div>
+                <div class="sq-cell sq-driver">
+                  <h4>Driver</h4>
+                  <p>Decisive<br>Results-Focused<br>Assertive</p>
+                </div>
+                <div class="sq-cell sq-amiable">
+                  <h4>Amiable</h4>
+                  <p>Friendly<br>Supportive<br>Patient</p>
+                </div>
+                <div class="sq-cell sq-expressive">
+                  <h4>Expressive</h4>
+                  <p>Enthusiastic<br>Creative<br>Persuasive</p>
+                </div>
+              </div>
+              <div class="sq-dot"></div>
+            </div>
+            <div class="sq-axes"><span>← People-Oriented</span><span>Task-Oriented →</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="trait-card">
+        <div class="trait-icon">🎯</div>
+        <h3>Strategy First, Ship Fast</h3>
+        <p>My PM passion is twofold: coming up with the right strategy and focus, then finalizing that focus and shipping fast. Iterations are the key to success.</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="trait-card">
+        <div class="trait-icon">🤝</div>
+        <h3>Influence Without Authority</h3>
+        <p>I genuinely enjoy problem discovery and rallying teams without formal authority. The question I always ask: what is the highest-value thing we can do right now?</p>
+      </div>
+      <div class="trait-card expandable" onclick="toggleTrait(this)">
+        <div class="trait-icon">🥋</div>
+        <h3>Outside Work</h3>
+        <p>Martial arts (discipline + strategy), poker (decision-making under uncertainty), and spending time with family and friends on the East Coast.</p>
+        <div class="expand-hint">▼ See in action</div>
+        <div class="trait-expand-body">
+          <div style="margin-top:14px;border-top:0.5px solid var(--sep);padding-top:14px;">
+            <img src="bjjtraining.jpg" alt="BJJ training" style="width:100%;border-radius:10px;object-fit:cover;max-height:240px;display:block;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Key Experiences ── -->
+<section id="experiences">
+  <div class="fade-in" style="margin-bottom:32px;">
+    <div class="chip">Relevant Work</div>
+    <h2 class="sh">Revenue Cycle &amp; Product Experiences</h2>
+    <p class="sp" style="max-width:600px;">Hands-on experience with the exact problems Luma Health solves — eligibility, claims, care navigation, and member engagement.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;" class="fade-in">
+
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div class="exp-ico" style="background:rgba(0,122,255,0.12);">🔗</div>
+        <div class="exp-title">
+          <h3>Multi-Benefit UX / Single Eligibility API</h3>
+          <p>Platform · Teladoc Health</p>
+        </div>
+        <span class="exp-chevron">▼</span>
+      </div>
+      <div class="exp-body"><div class="exp-inner">
+        <div class="exp-section">
+          <div class="exp-section-label">Problem</div>
+          <p>Members had to use multiple apps and create multiple accounts to access products from the same company. Eligibility implementation patterns varied across product groups, making it difficult to maintain, troubleshoot, and enhance.</p>
+        </div>
+        <div class="exp-section">
+          <div class="exp-section-label">What I Built</div>
+          <p>Converged multiple eligibility stacks into a single service, offering members their best possible benefit experience across chronic care, primary, mental health, and urgent care — all from one account.</p>
+        </div>
+        <div class="exp-outcome"><strong>Outcome:</strong> Monthly usage in the tens of thousands. Measurable increase in members accessing multiple products. High satisfaction at member and partner levels. Became the foundational eligibility layer for the entire platform.</div>
+        <div class="tl-metric-row" style="margin-top:14px;">
+          <span class="badge badge-blue">Platform-wide adoption</span>
+          <span class="badge badge-teal">Tens of thousands of MAU</span>
+          <span class="badge badge-green">Reduced integration complexity</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div class="exp-ico" style="background:rgba(52,199,89,0.12);">📋</div>
+        <div class="exp-title">
+          <h3>Claims &amp; Revenue Cycle Pipeline</h3>
+          <p>Platform · Teladoc/Livongo</p>
+        </div>
+        <span class="exp-chevron">▼</span>
+      </div>
+      <div class="exp-body"><div class="exp-inner">
+        <div class="exp-section">
+          <div class="exp-section-label">Problem</div>
+          <p>A growing pipeline of claims submissions was mostly manual and not fully automated. Variations in payor rules and pricing models made the adjudication process opaque — even to many internal employees, let alone patients.</p>
+        </div>
+        <div class="exp-section">
+          <div class="exp-section-label">What I Built</div>
+          <p>Developed a configurable claims submission pipeline (via CRM) to 30+ payors. Built the standards, processes, and tooling to ensure quality of claims data and patient data across all carrier formats.</p>
+        </div>
+        <div class="exp-outcome"><strong>Outcome:</strong> ~40% of Livongo's platform revenue ran through this pipeline. Reinforced to me why patients find medical bills confusing — adjudication is a true black box, and conversational AI is the right tool to finally explain it in plain language.</div>
+        <div class="tl-metric-row" style="margin-top:14px;">
+          <span class="badge badge-green">~40% of platform revenue</span>
+          <span class="badge badge-blue">30+ payor integrations</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div class="exp-ico" style="background:rgba(175,82,222,0.12);">🧠</div>
+        <div class="exp-title">
+          <h3>Mental Health Conversion Journey</h3>
+          <p>User Journey · Teladoc Health</p>
+        </div>
+        <span class="exp-chevron">▼</span>
+      </div>
+      <div class="exp-body"><div class="exp-inner">
+        <div class="exp-section">
+          <div class="exp-section-label">What I Built</div>
+          <p>Refactored 10–12 features and improvements across the Mental Health consultation journey to drive member conversion to therapy sessions. Iterated on a monthly cadence, effectively reducing team size while generating higher output.</p>
+        </div>
+        <div class="exp-outcome"><strong>Outcome:</strong> +6ppt conversion increase. Achieved the 1M visit milestone for the first time. Proved that fast iteration with a focused team beats large-scale rewrites.</div>
+        <div class="tl-metric-row" style="margin-top:14px;">
+          <span class="badge badge-purple">+6ppt conversion</span>
+          <span class="badge badge-green">1M visit milestone</span>
+          <span class="badge badge-blue">Monthly iteration cadence</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div class="exp-ico" style="background:rgba(255,149,0,0.12);">💰</div>
+        <div class="exp-title">
+          <h3>Financial Guidance &amp; Cost Transparency</h3>
+          <p>User Journey · Included Health</p>
+        </div>
+        <span class="exp-chevron">▼</span>
+      </div>
+      <div class="exp-body"><div class="exp-inner">
+        <div class="exp-section">
+          <div class="exp-section-label">What I Built</div>
+          <p>Calculated estimated cost on procedures within the provider search interface. Used a large claims dataset from a self-insurer to build models that surface cost estimates to drive member engagement and care decisions.</p>
+        </div>
+        <div class="exp-outcome"><strong>Outcome &amp; Takeaway:</strong> Used by 1M+ members. 3x increase in user satisfaction and product retention. Financial transparency — making cost predictable — is a dramatically better member experience. Members who understand what they'll pay are more likely to seek care.</div>
+        <div class="tl-metric-row" style="margin-top:14px;">
+          <span class="badge badge-orange">1M+ members</span>
+          <span class="badge badge-green">3x retention improvement</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div class="exp-ico" style="background:rgba(49,242,254,0.1);">🤝</div>
+        <div class="exp-title">
+          <h3>Client &amp; Member Onboarding</h3>
+          <p>Operational and Platform · Livongo and Teladoc Health</p>
+        </div>
+        <span class="exp-chevron">▼</span>
+      </div>
+      <div class="exp-body"><div class="exp-inner">
+        <div class="exp-section">
+          <div class="exp-section-label">What I Built</div>
+          <p>Partnered as Product SME with many employer and payor implementation teams to integrate services. Onboarding was not seamless — dedicated teams and SLAs existed across eligibility, configuration, and member activation. I worked across all of them to improve the end-to-end experience.</p>
+        </div>
+        <div class="exp-outcome"><strong>Takeaway:</strong> Making the right product decisions in this area to improve client/partner onboarding takes a lot of discipline and the alignment organizationally to make meaningful progress.</div>
+        <div class="tl-metric-row" style="margin-top:14px;">
+          <span class="badge badge-teal">employer/payer/TPA implementations</span>
+          <span class="badge badge-blue">Cross-functional Product SME</span>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Why Luma ── -->
+<section id="why-luma">
+  <div class="fade-in" style="margin-bottom:32px;">
+    <div class="chip">Motivation</div>
+    <h2 class="sh">Why Luma Health</h2>
+  </div>
+  <div class="g3 fade-in" style="margin-bottom:24px;">
+    <div class="ios-card" style="border-top:3px solid var(--teal);">
+      <div style="font-size:1.8rem;margin-bottom:12px;">⚡</div>
+      <h3>Move Faster, Make More Impact</h3>
+      <p>I spend too much time on overhead at a large company. I want to be part of a smaller team where my decisions directly shape product direction and customer outcomes — with less process, more action.</p>
+    </div>
+    <div class="ios-card" style="border-top:3px solid var(--blue);">
+      <div style="font-size:1.8rem;margin-bottom:12px;">🤖</div>
+      <h3>Propel AI Adoption in Healthcare</h3>
+      <p>The entire industry is going through change and AI is going to be adopted everywhere. I want to be part of a team steering its direction — not watching from the sidelines. Luma is doing exactly that.</p>
+    </div>
+    <div class="ios-card" style="border-top:3px solid var(--purple);">
+      <div style="font-size:1.8rem;margin-bottom:12px;">🎯</div>
+      <h3>Domain + AI = High Value Potential</h3>
+      <p>Luma has a specialized focus in a domain that is evolving rapidly with AI. The potential for creating immense value is very high, and my revenue cycle and member engagement experience maps directly to that opportunity.</p>
+    </div>
+  </div>
+  <div class="callout fade-in">
+    <span class="icon">💡</span>
+    <span>My background in eligibility, claims pipelines, and member conversion is directly applicable to what Luma Health is building. I've lived the exact problems — the adjudication black box, the onboarding friction, the cost opacity — that Luma is solving with AI.</span>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <span class="f-name">Wensong Hu</span>
+  <div class="f-links">
+    <a href="mailto:wensonghu@gmail.com">wensonghu@gmail.com</a>
+    <a href="tel:2022887619">(202) 288-7619</a>
+    <a href="https://linkedin.com/in/wensonghu" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// ── Timeline data ──────────────────────────────────────────────────────────────
+const TL = [
+  {
+    year: '2003–06',
+    role: 'B.S. Electrical Engineering',
+    company: 'University of Maryland',
+    location: 'College Park, MD',
+    dates: 'Sep 2003 – Dec 2006',
+    color: 'teal',
+    icon: '🎓',
+    icoColor: 'rgba(49,242,254,0.15)',
+    accentColor: 'var(--teal)',
+    bullets: [
+      'Bachelor of Science in Electrical Engineering — Microelectronics',
+      'Built foundational skills in systems thinking, analytical problem decomposition, and engineering rigor',
+      'Early foundation for understanding complex technical systems — directly applicable to healthcare data platforms'
+    ],
+    badges: []
+  },
+  {
+    year: '2007–14',
+    role: 'Software Engineer → Manager',
+    company: 'Accenture',
+    location: 'Washington, DC',
+    dates: 'Feb 2007 – Jul 2014',
+    color: 'blue',
+    icon: '💼',
+    icoColor: 'rgba(78,94,214,0.2)',
+    accentColor: 'var(--blue)',
+    bullets: [
+      'Led end-to-end deliveries of multi-million dollar implementations and post-merger integrations for pharmaceutical and healthcare companies',
+      '<strong>Designed and built a 24/7 online data portal for a leading healthcare payer</strong> — providing high-availability data service to millions of members',
+      'Consolidated a large-scale contracting data warehouse supporting the merger of two major pharmaceutical companies',
+      'Program managed post-merger integration of 25 critical enterprise systems — directed 90 team members across regions for 8 months',
+      'Created an hour-by-hour 10-day deployment plan with 600+ tasks to maximize efficiency and minimize downtime'
+    ],
+    badges: ['Healthcare Payer Systems', 'Enterprise Data', 'Team Leadership']
+  },
+  {
+    year: '2014–17',
+    role: 'MBA + Sr Technical Manager',
+    company: 'Chicago Booth · UChicago',
+    location: 'Chicago, IL',
+    dates: 'Jul 2014 – Dec 2017 (MBA: June 2017)',
+    color: 'purple',
+    icon: '📊',
+    icoColor: 'rgba(175,82,222,0.18)',
+    accentColor: 'var(--purple)',
+    bullets: [
+      '<strong>MBA — Economics, Entrepreneurship and Strategic Management</strong>, University of Chicago Booth School of Business',
+      'Senior Technical Manager, UChicago Office of Alumni Relations — managed software engineers and analysts to deliver a robust analytics product',
+      'Supported marketing needs of the Chicago $5B fundraising campaign',
+      'Created and operationalized predictive models to identify high-net-worth alumni likelihood of giving — early applied ML in a real business context'
+    ],
+    badges: ['MBA · Chicago Booth', 'Predictive Modeling', 'Analytics']
+  },
+  {
+    year: '2018–19',
+    role: 'Product Manager, Data Lead',
+    company: 'Included Health',
+    location: 'San Francisco, CA',
+    dates: 'Jan 2018 – Dec 2019',
+    color: 'green',
+    icon: '🏥',
+    icoColor: 'rgba(23,204,69,0.12)',
+    accentColor: 'var(--green)',
+    bullets: [
+      'Owned the data product (analytics) roadmap for product and client analytics; created and evangelized data-driven decision-making tools company-wide',
+      '<strong>Developed Financial Guidance on the patient app</strong> — surfaced cost of services for providers and procedures using a large self-insurer dataset',
+      'Used by 1M+ members — increased user satisfaction and product retention by 3x',
+      'Refactored the medical claims processing pipeline across 30+ carrier formats while delivering on customer commitments',
+      'Built standards, processes, and tooling to ensure quality of claims and patient data'
+    ],
+    badges: ['Financial Guidance', '1M+ Members', 'Claims Pipeline', '3x Retention']
+  },
+  {
+    year: '2020–Now',
+    role: 'Director of Product Management',
+    company: 'Livongo Health → Teladoc Health',
+    location: 'San Jose, CA',
+    dates: 'Jan 2020 – Present',
+    color: 'accent',
+    icon: '🚀',
+    icoColor: 'rgba(0,122,255,0.18)',
+    accentColor: '#007AFF',
+    isCurrent: true,
+    bullets: [
+      '<strong>Head of Member Growth, RCM and Eligibility</strong> — $12M R&D budget; generating 5M+ urgent care consults and 1M+ mental health and chronic condition enrollments annually',
+      'Architected single eligibility API and automated claims platform handling medical claims submission across 30+ payors (<strong>~40% of Livongo platform revenue</strong>)',
+      'Increased Mental Health user base by 15% and Primary Care utilization by 12%',
+      '+6ppt Mental Health conversion; achieved 1M visit milestone for the first time',
+      'Designed AI-enabled onboarding journeys; partnered with providers and clinical/member operations to optimize medical intake',
+      'Managed and grew a team of 6 experienced PMs'
+    ],
+    badges: ['$12M R&D Budget', '~40% Platform Revenue', '+6ppt Conversion', '5M+ Annual Consults']
+  }
+];
+
+let activeTl = TL.length - 1; // default: most recent
+
+function buildTimeline() {
+  const row = document.getElementById('tl-row');
+  TL.forEach((item, i) => {
+    const node = document.createElement('div');
+    node.className = 'tl-node' + (i === activeTl ? ' active' : '');
+    node.dataset.color = item.color;
+    node.dataset.index = i;
+    node.innerHTML = `
+      <div class="tl-dot-wrap">${item.icon}</div>
+      <div class="tl-year">${item.year}</div>
+      <div class="tl-role">${item.role}</div>
+      <div class="tl-co">${item.company}</div>
+    `;
+    node.addEventListener('click', () => selectTl(i));
+    row.appendChild(node);
+  });
+  renderTlDetail(activeTl);
+}
+
+function selectTl(i) {
+  activeTl = i;
+  document.querySelectorAll('.tl-node').forEach((n, idx) => {
+    n.classList.toggle('active', idx === i);
+  });
+  renderTlDetail(i);
+}
+
+function renderTlDetail(i) {
+  const item = TL[i];
+  const detail = document.getElementById('tl-detail-inner');
+  const badgesHtml = item.badges.length
+    ? `<div class="tl-metric-row">${item.badges.map(b => `<span class="badge" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1);">${b}</span>`).join('')}</div>`
+    : '';
+  const currentBadge = item.isCurrent ? `<span class="badge badge-green" style="margin-left:8px;">Current</span>` : '';
+
+  detail.innerHTML = `
+    <div class="tl-detail-header">
+      <div class="tl-detail-ico" style="background:${item.icoColor};">${item.icon}</div>
+      <div class="tl-detail-title">
+        <h2>${item.role}${currentBadge}</h2>
+        <div class="tl-detail-co">${item.company} · ${item.location}</div>
+        <div class="tl-detail-dates">${item.dates}</div>
+      </div>
+    </div>
+    <ul class="tl-bullets">
+      ${item.bullets.map(b => `<li style="--dot-color:${item.accentColor};">${b}</li>`).join('')}
+    </ul>
+    ${badgesHtml}
+  `;
+
+  // color the bullet dots
+  detail.querySelectorAll('.tl-bullets li').forEach(li => {
+    const pseudo = li.style;
+    li.style.setProperty('--dot-color', item.accentColor);
+  });
+  detail.querySelectorAll('.tl-bullets li::before');
+
+  // inject dot color via inline style on a child span trick
+  detail.querySelectorAll('.tl-bullets li').forEach(li => {
+    const dot = document.createElement('span');
+    dot.style.cssText = `position:absolute;left:4px;top:17px;width:6px;height:6px;border-radius:50%;background:${item.accentColor};display:block;`;
+    li.style.position = 'relative';
+    li.style.listStyle = 'none';
+    li.insertBefore(dot, li.firstChild);
+  });
+}
+
+// ── Expandable experiences ────────────────────────────────────────────────────
+function toggleExp(el) {
+  el.classList.toggle('open');
+}
+
+// ── Expandable trait cards ─────────────────────────────────────────────────────
+function toggleTrait(el) {
+  el.classList.toggle('open');
+}
+
+// ── Scroll fade-in ─────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+buildTimeline();
+</script>
+</body>
+</html>
